@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>simplify.x — Verificador & Guia de Golpes (melhorado)</title>
+<link rel="manifest" href="site.webmanifest">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#071023; --muted:#9aa7b2; --accent:#58a6ff;
+    --good:#8aff8a; --bad:#ff6b6b; --glass: rgba(255,255,255,0.02);
+    --card:#0b1220; --text:#c9d1d9;
+  }
+  [data-theme="light"]{
+    --bg:#f6f8fa; --panel:#ffffff; --muted:#556976; --accent:#0b66ff;
+    --good:#0b8a0b; --bad:#c92a2a; --glass: rgba(2,6,23,0.03);
+    --card:#ffffff; --text:#0b1220;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+  header{display:flex;align-items:center;gap:1rem;padding:1rem;position:sticky;top:0;border-bottom:1px solid rgba(0,0,0,0.06);background:linear-gradient(180deg,transparent,rgba(0,0,0,0.03));z-index:30}
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+  .logo{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:linear-gradient(135deg,var(--accent),#7ee0ff);color:#042028;font-weight:800}
+  .header-actions{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.45rem .7rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:var(--panel);cursor:pointer;font-weight:600}
+  .icon{width:18px;height:18px;display:inline-block}
+  .container{max-width:1100px;margin:1.5rem auto;padding:1rem}
+  .top-grid{display:grid;grid-template-columns:1fr 320px;gap:1rem;align-items:start}
+  .panel{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 6px 18px rgba(2,6,23,0.25)}
+  h1{margin:0;font-size:1.25rem}
+  .muted{color:var(--muted)}
+  .search-row{display:flex;gap:.5rem;align-items:center;margin-top:.6rem}
+  input[type="text"]{padding:.6rem .8rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:var(--text);flex:1}
+  .wide-btn{padding:.6rem .85rem;background:var(--accent);color:#fff;border:none;border-radius:8px;cursor:pointer}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;margin-top:1rem}
+  .card{padding:1rem;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.03);display:flex;flex-direction:column;gap:.6rem}
+  .card-header{display:flex;gap:.6rem;align-items:center;justify-content:space-between}
+  .card-title{font-weight:800}
+  .tag{font-size:.8rem;padding:.25rem .45rem;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700}
+  .stats{display:flex;flex-direction:column;gap:.4rem}
+  .stat-row{display:flex;justify-content:space-between;font-weight:700}
+  .small{font-size:.9rem;color:var(--muted)}
+  .list-links{list-style:none;padding:0;margin:0}
+  .list-links li{font-size:.9rem;margin:.25rem 0;word-break:break-word}
+  .controls{display:flex;gap:.4rem;flex-wrap:wrap}
+  footer{margin-top:1.2rem;text-align:center;color:var(--muted);font-size:.9rem}
+  .history{max-height:200px;overflow:auto;padding-right:.4rem}
+  .chip{padding:.25rem .5rem;border-radius:8px;background:rgba(255,255,255,0.02);font-weight:700;font-size:.9rem}
+  @media(max-width:920px){.top-grid{grid-template-columns:1fr}}
+  .center{display:flex;align-items:center;justify-content:center}
+  .danger{color:var(--bad);font-weight:800}
+  .safe{color:var(--good);font-weight:800}
+  .search-controls{display:flex;gap:.5rem;align-items:center}
+  .card-footer{display:flex;gap:.4rem;justify-content:space-between;align-items:center;margin-top:.5rem}
+  .hide-mobile{display:inline-block}
+  @media(max-width:640px){.hide-mobile{display:none}}
+</style>
+</head>
+<body data-theme="dark">
+<header>
+  <div class="brand">
+    <div class="logo">sx</div>
+    <div>
+      <div style="font-weight:900">simplify.x</div>
+      <div class="small muted">Verificador & Guia de Golpes</div>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <div class="small muted hide-mobile">Tema</div>
+    <button id="themeToggle" class="btn" title="Alternar tema">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v2M12 19v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span id="themeLabel">Dark</span>
+    </button>
+
+    <button id="openScams" class="btn" title="Como se precaver?">
+      <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M3 13h18M3 6h18M3 20h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Lista
+    </button>
+  </div>
+</header>
+
+<main class="container">
+  <div class="top-grid">
+    <!-- esquerda: verificador / lista -->
+    <div>
+      <div class="panel">
+        <h1>Verificador de URLs</h1>
+        <div class="small muted">Cole a URL e veja análises rápidas: heurísticas, histórico e botão de verificação.</div>
+
+        <div class="search-row" style="margin-top:.8rem">
+          <input type="text" id="urlInput" placeholder="https://exemplo.com - teste com bit.ly, números, hífens..." aria-label="URL">
+          <button id="checkBtn" class="wide-btn">Verificar</button>
+        </div>
+
+        <div style="display:flex;gap:.6rem;margin-top:.6rem;align-items:center;justify-content:space-between">
+          <div class="small muted">Resultado rápido:</div>
+          <div id="resultBadge" class="chip">—</div>
+        </div>
+
+        <div id="resultado" style="margin-top:.6rem"></div>
+
+        <div style="display:flex;gap:.5rem;margin-top:.8rem;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div class="controls">
+            <button id="liveToggle" class="btn" title="Verificar enquanto digita">Verificação em tempo real: <strong id="liveState">ON</strong></button>
+            <button id="clearHistory" class="btn" title="Limpar histórico">Limpar histórico</button>
+            <button id="reportUrl" class="btn" title="Reportar URL">Reportar</button>
+          </div>
+          <div class="small muted">Últimas verificações</div>
+        </div>
+
+        <div class="history panel" id="historyBox" style="margin-top:.6rem;padding:.6rem;max-height:180px;overflow:auto"></div>
+      </div>
+
+      <div id="scamsPanel" class="panel" style="margin-top:1rem">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h1 style="font-size:1rem;margin:0">Como se precaver</h1>
+            <div class="small muted">Clique em um card para ver a página dedicada</div>
+          </div>
+          <div style="display:flex;gap:.5rem;align-items:center">
+            <input id="searchScams" type="text" placeholder="Buscar golpes..." style="padding:.4rem .6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent">
+            <select id="filterType" style="padding:.4rem;border-radius:8px">
+              <option value="all">Todos</option>
+              <option value="top">Mais comuns</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cards" class="cards" style="margin-top:.8rem"></div>
+      </div>
+    </div>
+
+    <!-- direita: painel de estatísticas -->
+    <aside>
+      <div class="panel">
+        <h1 style="font-size:1rem;margin:0">Painel</h1>
+        <div class="small muted">Estatísticas e ações rápidas</div>
+
+        <div class="stats" style="margin-top:.6rem">
+          <div class="stat-row"><span>Golpes cadastrados</span><span id="statScams">0</span></div>
+          <div class="stat-row"><span>Verificações (local)</span><span id="statChecks">0</span></div>
+          <div class="stat-row"><span>Suspeitos hoje</span><span id="statSuspect">0</span></div>
+          <div class="stat-row"><span>URLs seguras</span><span id="statSafe">0</span></div>
+        </div>
+
+        <hr style="margin: .8rem 0; border: none; height:1px; background: rgba(255,255,255,0.03)">
+
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <button id="exportReport" class="btn">Exportar relatório (CSV)</button>
+          <a id="installHint" class="btn" style="text-decoration:none" href="#">Instalar (PWA)</a>
+        </div>
+
+        <div style="margin-top:.8rem">
+          <div class="small muted">Relatórios rápidos</div>
+          <ul class="list-links" style="margin-top:.4rem">
+            <li><a id="reportMail" href="#" style="color:var(--accent);text-decoration:none">Reportar por e-mail</a></li>
+            <li><a id="reportWhats" href="#" style="color:var(--accent);text-decoration:none">Reportar por WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:1rem">
+        <h1 style="font-size:1rem;margin:0">Dica rápida</h1>
+        <div class="small muted" style="margin-top:.4rem">Sempre prefira digitar o site oficial e valide dados por canais independentes.</div>
+        <div style="margin-top:.6rem;text-align:center">
+          <button id="quizBtn" class="wide-btn">Simulador: esse site é seguro?</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer>
+    Criado para fins educativos — não substitui ferramentas especializadas. © simplify.x
+  </footer>
+</main>
+
+<!-- Páginas dinâmicas em hash -->
+<template id="detailTpl">
+  <div class="panel">
+    <h1 id="detailTitle"></h1>
+    <p class="small muted" id="detailLead"></p>
+    <div id="detailBody" style="margin-top:.6rem"></div>
+    <div style="margin-top:.6rem">
+      <a id="backToList" href="#/" class="btn">Voltar</a>
+    </div>
+  </div>
+</template>
+
+<script>
+(function(){
+
+  /* ---------- dados (sem repetições) ---------- */
+  const baseGolpes = [
+    "Phishing","Golpe do Boleto Falso","Golpe do PIX Premiado","Smishing (phishing por SMS)",
+    "Clonagem de WhatsApp","Falso Suporte Técnico","Anúncio de Aluguel Falso","Falso Emprego / Vaga",
+    "Marketplace / Compra Fantasma","Golpe do Delivery","Golpe do Bilhete Premiado","Golpe do Empréstimo Fácil",
+    "Falso Leilão","Golpe de Investimento Fraudulento","Golpe da Pesquisa que Paga","Golpe do Amor (romance scam)",
+    "Falso Alerta de Ransomware (scareware)","Golpe do QR Code Fraudulento","Golpe do Falso Reembolso","Golpe da Nota Fiscal Falsa"
+  ];
+  const SCAMS = baseGolpes.map((title,i)=>({ id: i+1, title, severity: (i%3===0? 'alto': (i%3===1?'médio':'baixo')) }));
+
+  /* ---------- DOM ---------- */
+  const cardsEl = document.getElementById('cards');
+  const searchScams = document.getElementById('searchScams');
+  const filterType = document.getElementById('filterType');
+  const statScams = document.getElementById('statScams');
+  const statChecks = document.getElementById('statChecks');
+  const statSuspect = document.getElementById('statSuspect');
+  const statSafe = document.getElementById('statSafe');
+
+  const urlInput = document.getElementById('urlInput');
+  const checkBtn = document.getElementById('checkBtn');
+  const resultado = document.getElementById('resultado');
+  const resultBadge = document.getElementById('resultBadge');
+  const historyBox = document.getElementById('historyBox');
+  const clearHistory = document.getElementById('clearHistory');
+  const liveToggle = document.getElementById('liveToggle');
+  const liveState = document.getElementById('liveState');
+  const reportUrl = document.getElementById('reportUrl');
+  const openScams = document.getElementById('openScams');
+  const themeToggle = document.getElementById('themeToggle');
+  const themeLabel = document.getElementById('themeLabel');
+  const exportReport = document.getElementById('exportReport');
+  const reportMail = document.getElementById('reportMail');
+  const reportWhats = document.getElementById('reportWhats');
+  const quizBtn = document.getElementById('quizBtn');
+  const installHint = document.getElementById('installHint');
+
+  /* ---------- estado ---------- */
+  let checks = JSON.parse(localStorage.getItem('sx_checks')||'[]'); // {url, verdict, at}
+  let live = true;
+  let theme = localStorage.getItem('sx_theme') || 'dark';
+  document.body.setAttribute('data-theme', theme);
+  themeLabel.textContent = theme === 'dark' ? 'Dark' : 'Light';
+
+  /* ---------- util ---------- */
+  function debounce(fn,ms=350){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms);} }
+  function sanitize(s){ return (s||'').trim(); }
+
+  /* ---------- Verificação heurística (cliente) ---------- */
+  function heuristics(urlRaw){
+    const s = sanitize(urlRaw);
+    if(!s) return {ok:false,msg:'Insira uma URL.'};
+    // tentar parse
+    try{
+      const u = new URL(s.indexOf('://')===-1? 'http://'+s:s);
+      const issues = [];
+      // protocolo
+      if(u.protocol !== 'https:') issues.push('Sem HTTPS');
+      // muitos hífens
+      if((u.hostname.match(/-/g)||[]).length >= 3) issues.push('Muitos hífens');
+      // muitos dígitos
+      if((u.hostname.match(/\d/g)||[]).length >= 4) issues.push('Muitos dígitos no domínio');
+      // subdomínios suspeitos
+      if(u.hostname.split('.').length >= 4) issues.push('Subdomínio longo');
+      // comprimento de caminho muito curto com encurtador
+      if(/bit\.ly|tinyurl|goo\.gl|t\.co|is\.gd|ow\.ly/i.test(u.hostname)) issues.push('URL encurtada: expanda antes de abrir');
+      // domínio parecido? (heurística simples)
+      if(/login|secure|account|verify|confirm|webapp/i.test(u.pathname)) issues.push('Caminho com palavras de engenharia social');
+      const verdict = issues.length ? 'suspeita' : 'segura';
+      return {ok: true, verdict, issues, normalized: u.href, host: u.hostname};
+    }catch(e){
+      return {ok:false,msg:'Formato de URL inválido.'};
+    }
+  }
+
+  /* ---------- histórico UI ---------- */
+  function renderHistory(){
+    historyBox.innerHTML = '';
+    if(!checks.length){ historyBox.innerHTML = '<div class="muted small">Nenhuma verificação ainda.</div>'; return; }
+    checks.slice().reverse().forEach(c=>{
+      const row = document.createElement('div');
+      row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='.25rem 0';
+      const left = document.createElement('div'); left.style.maxWidth='70%';
+      left.innerHTML = `<div style="font-weight:800">${c.url}</div><div class="small muted">${new Date(c.at).toLocaleString()}</div>`;
+      const right = document.createElement('div'); right.style.textAlign='right';
+      right.innerHTML = `<div class="${c.verdict==='segura'?'safe':'danger'}">${c.verdict.toUpperCase()}</div>`;
+      row.append(left,right);
+      historyBox.append(row);
+    });
+  }
+
+  /* ---------- stats ---------- */
+  function updateStats(){
+    statScams.textContent = SCAMS.length;
+    statChecks.textContent = checks.length;
+    statSuspect.textContent = checks.filter(c=>c.verdict!=='segura').length;
+    statSafe.textContent = checks.filter(c=>c.verdict==='segura').length;
+  }
+
+  /* ---------- cards list ---------- */
+  function mkCard(s){
+    const el = document.createElement('div'); el.className = 'card';
+    const header = document.createElement('div'); header.className='card-header';
+    const left = document.createElement('div');
+    left.innerHTML = `<div class="card-title">${s.id}. ${s.title}</div><div class="small muted">Severidade: <span class="tag">${s.severity}</span></div>`;
+    header.append(left);
+    const openBtn = document.createElement('button'); openBtn.className='btn'; openBtn.textContent='Abrir';
+    openBtn.addEventListener('click', ()=> { location.hash = '#/scam/'+s.id; });
+    header.append(openBtn);
+    el.append(header);
+
+    const desc = document.createElement('div'); desc.className='small muted';
+    desc.textContent = `Resumo rápido: ${s.title} — sinais comuns e prevenções.`;
+    el.append(desc);
+
+    const footer = document.createElement('div'); footer.className='card-footer';
+    const samples = document.createElement('div'); samples.className='small muted';
+    samples.innerHTML = `<ul class="list-links"><li>https://exemplo-${s.id}.com</li><li>https://fraude-${s.id}-lookalike.com</li></ul>`;
+    footer.append(samples);
+    const share = document.createElement('div');
+    const repBtn = document.createElement('button'); repBtn.className='btn'; repBtn.textContent='Reportar';
+    repBtn.addEventListener('click', ()=> {
+      const subject = encodeURIComponent(`Suspeita: ${s.title}`);
+      const body = encodeURIComponent(`Encontrei um exemplo relacionado ao golpe "${s.title}". URL: https://exemplo-${s.id}.com`);
+      window.location.href = `mailto:security@example.com?subject=${subject}&body=${body}`;
+    });
+    share.append(repBtn);
+    footer.append(share);
+
+    el.append(footer);
+    return el;
+  }
+
+  function renderCards(filterText=''){
+    cardsEl.innerHTML = '';
+    const text = (filterText||'').toLowerCase().trim();
+    const filtered = SCAMS.filter(s=>{
+      if(text && !(`${s.title}`.toLowerCase().includes(text))) return false;
+      if(filterType.value === 'top' && s.severity === 'baixo') return false;
+      return true;
+    });
+    if(!filtered.length){ cardsEl.innerHTML = '<div class="muted small">Nenhum golpe encontrado.</div>'; return;}
+    filtered.forEach(s=> cardsEl.appendChild(mkCard(s)));
+  }
+
+  /* ---------- verificação e UI ---------- */
+  function showResult(res){
+    if(!res.ok){ resultado.innerHTML = `<div class="muted">${res.msg}</div>`; resultBadge.textContent = '—'; return; }
+    if(res.verdict === 'suspeita'){
+      resultado.innerHTML = `<div class="danger" style="font-weight:900">⚠️ Indícios de risco:</div><div class="small muted">${res.issues.join(' • ')}</div>`;
+      resultBadge.textContent = 'SUSPEITA'; resultBadge.className = 'chip';
+      resultBadge.style.background = 'transparent';
+      resultBadge.style.color = 'var(--text)';
+    } else {
+      resultado.innerHTML = `<div class="safe" style="font-weight:900">✅ URL aparentemente segura.</div><div class="small muted">Host: ${res.host}</div>`;
+      resultBadge.textContent = 'SEGURA';
+    }
+  }
+
+  function recordCheck(url,verdict){
+    checks = checks || [];
+    checks.push({url, verdict, at: Date.now()});
+    localStorage.setItem('sx_checks', JSON.stringify(checks));
+    renderHistory();
+    updateStats();
+  }
+
+  /* ---------- events ---------- */
+  checkBtn.addEventListener('click', ()=>{
+    const v = heuristics(urlInput.value);
+    if(!v.ok) { showResult(v); return; }
+    showResult(v);
+    recordCheck(v.normalized, v.verdict);
+  });
+
+  const liveCheckHandler = debounce(()=>{
+    if(!live) return;
+    const v = heuristics(urlInput.value);
+    showResult(v);
+  }, 400);
+  urlInput.addEventListener('input', liveCheckHandler);
+
+  liveToggle.addEventListener('click', ()=> {
+    live = !live;
+    localStorage.setItem('sx_live', live ? '1' : '0');
+    liveState.textContent = live ? 'ON' : 'OFF';
+  });
+
+  clearHistory.addEventListener('click', ()=>{
+    if(!confirm('Limpar histórico local das verificações?')) return;
+    checks = []; localStorage.removeItem('sx_checks'); renderHistory(); updateStats();
+  });
+
+  reportUrl.addEventListener('click', ()=>{
+    const url = urlInput.value || '';
+    const subject = encodeURIComponent('Reportar URL suspeita');
+    const body = encodeURIComponent('URL: ' + url + '\n\nObservações: ');
+    window.location.href = `mailto:security@example.com?subject=${subject}&body=${body}`;
+  });
+
+  searchScams.addEventListener('input', debounce(()=> renderCards(searchScams.value), 220));
+  filterType.addEventListener('change', ()=> renderCards(searchScams.value));
+  openScams.addEventListener('click', ()=> { window.scrollTo({top: document.getElementById('scamsPanel').offsetTop - 80, behavior: 'smooth'}); });
+
+  themeToggle.addEventListener('click', ()=>{
+    theme = (document.body.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('sx_theme', theme);
+    themeLabel.textContent = theme === 'dark' ? 'Dark' : 'Light';
+  });
+
+  exportReport.addEventListener('click', ()=>{
+    // exporta checks como CSV simples
+    const rows = [['url','verdict','at']];
+    checks.forEach(c=> rows.push([`"${c.url.replace(/"/g,'""')}"`,c.verdict,new Date(c.at).toISOString()]));
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv],{type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'simplifyx_checks.csv'; a.click(); URL.revokeObjectURL(url);
+  });
+
+  reportMail.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const subject = encodeURIComponent('Reportar atividade suspeita - simplify.x');
+    const body = encodeURIComponent('Descrição: \nURL: \nObservações: ');
+    window.location.href = `mailto:security@example.com?subject=${subject}&body=${body}`;
+  });
+
+  reportWhats.addEventListener('click', (e)=>{
+    e.preventDefault();
+    const text = encodeURIComponent('Encontrei um possível golpe, veja: ');
+    // botão para abrir WhatsApp Web; número vazio (usuário escolhe)
+    window.open(`https://wa.me/?text=${text}`, '_blank');
+  });
+
+  quizBtn.addEventListener('click', ()=>{
+    alert('Simulador simples: abra a lista de golpes, escolha um card e tente identificar sinais. (Implementar quiz interativo em próxima iteração)');
+  });
+
+  installHint.addEventListener('click', (e)=>{
+    e.preventDefault();
+    alert('PWA: abra as configurações do navegador e selecione "Instalar". Há suporte básico via service worker (registro).');
+  });
+
+  /* ---------- routing / detalhes ---------- */
+  function renderDetail(id){
+    const tpl = document.getElementById('detailTpl');
+    const clone = tpl.content.cloneNode(true);
+    const title = clone.getElementById('detailTitle');
+    const lead = clone.getElementById('detailLead');
+    const body = clone.getElementById('detailBody');
+    const back = clone.getElementById('backToList');
+
+    const s = SCAMS.find(x=>x.id===id);
+    if(!s) { title.textContent = 'Golpe não encontrado'; lead.textContent = ''; body.innerHTML = `<p class="muted">ID inválido. Volte à lista.</p>`; }
+    else {
+      title.textContent = `${s.id}. ${s.title}`;
+      lead.textContent = `${s.title}: explicação e medidas práticas.`;
+      let html = `<div class="panel" style="padding:.6rem;margin-bottom:.6rem"><strong>Resumo:</strong> Este golpe costuma usar engenharia social para induzir o usuário a clicar em links ou informar dados.</div>`;
+      html += `<h3>Como identificar</h3><ul class="small muted"><li>Erros de ortografia no domínio</li><li>Ofertas irreais</li><li>Solicitação de dados fora de canais oficiais</li></ul>`;
+      html += `<h3>Como se precaver</h3><ul class="small muted"><li>Não clicar em links suspeitos</li><li>Confirmar via canal oficial</li><li>Ativar 2FA e manter sistemas atualizados</li></ul>`;
+      html += `<h3>Links de exemplo (educativo)</h3><ul class="list-links"><li>http://exemplo-${s.id}.com</li><li>https://fraude-${s.id}-lookalike.com/login</li></ul>`;
+      html += `<div style="margin-top:.6rem"><button class="btn" onclick="navigator.clipboard?.writeText('http://exemplo-${s.id}.com').then(()=>alert('Copiado!'))">Copiar exemplo</button></div>`;
+      body.innerHTML = html;
+    }
+
+    // replace main content with detail
+    const main = document.querySelector('main.container');
+    // remove top-grid and insert detail panel temporarily
+    main.scrollIntoView({behavior:'smooth'});
+    // show detail in an overlay (simple)
+    const overlay = document.createElement('div');
+    overlay.style.position='fixed'; overlay.style.inset='0'; overlay.style.background='rgba(0,0,0,0.5)'; overlay.style.display='flex';
+    overlay.style.alignItems='center'; overlay.style.justifyContent='center'; overlay.style.zIndex=9999;
+    const wrapper = document.createElement('div'); wrapper.style.maxWidth='900px'; wrapper.style.width='95%';
+    wrapper.appendChild(clone);
+    const close = ()=>{
+      overlay.remove();
+      if(location.hash.startsWith('#/scam/')) location.hash = '#/scams';
+    };
+    overlay.addEventListener('click', (ev)=> { if(ev.target===overlay) close(); });
+    const closeBtn = document.createElement('button'); closeBtn.className='btn'; closeBtn.textContent='Fechar'; closeBtn.style.marginTop='.6rem';
+    closeBtn.addEventListener('click', close);
+    wrapper.querySelector('.panel').appendChild(closeBtn);
+    overlay.appendChild(wrapper);
+    document.body.appendChild(overlay);
+  }
+
+  function route(){
+    const hash = (location.hash||'#/').replace(/^#/,'');
+    const parts = hash.split('/').filter(Boolean);
+    if(parts[0]==='scam' && parts[1]) {
+      const id = Number(parts[1]);
+      renderDetail(id);
+    } else {
+      // default no-op (main UI already present)
+    }
+  }
+  window.addEventListener('hashchange', route);
+
+  /* ---------- PWA: service worker registration (stub) ---------- */
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js').then(()=> {
+      console.log('sw registered (stub)');
+    }).catch(()=>{/* ignore */});
+  }
+
+  /* ---------- inicialização ---------- */
+  function init(){
+    renderCards();
+    renderHistory();
+    updateStats();
+    // prefills
+    document.getElementById('statScams').textContent = SCAMS.length;
+    // restore checks from storage already used
+    checks = JSON.parse(localStorage.getItem('sx_checks')||'[]');
+    renderHistory();
+    updateStats();
+    // keyboard: Enter on input triggers check
+    urlInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') checkBtn.click(); });
+  }
+
+  init();
+
+  // expose small API for debugging
+  window._simplify = {SCAMS, renderCards, heuristics};
+
+})();
+</script>
+
+<!-- minimal webmanifest -->
+<script type="application/json" id="manifest-json">
+{
+  "name": "simplify.x",
+  "short_name": "simplify.x",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "icons": []
+}
+</script>
+
+<!-- service worker stub file creation note:
+     you'll need to create a file 'sw.js' with basic caching if you want real PWA behavior.
+     Example minimal sw.js:
+     self.addEventListener('install', e => self.skipWaiting());
+     self.addEventListener('fetch', e => {});
+-->
+
+</body>
+</html>

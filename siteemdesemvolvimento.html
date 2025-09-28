@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark-theme">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simplify.x - A sua Defesa Digital Começa Aqui</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        /*
+        ==========================================================================
+         1. CONFIGURAÇÃO GLOBAL E VARIÁVEIS DE TEMA (ROOT)
+        ==========================================================================
+        */
+
+        :root {
+            /* Paleta de Cores (Tema Escuro por Padrão) */
+            --bg-color: #0b0f16;
+            --bg-secondary-color: #111824;
+            --bg-tertiary-color: #0c121d;
+            --border-color: #1f2a3a;
+            --text-primary-color: #ffffff;
+            --text-secondary-color: #ccc;
+            --text-muted-color: #888;
+            --primary-blue: #3498db;
+            --primary-blue-hover: #5dade2;
+            --primary-blue-darker: #217dbb;
+            --success-color: #2ecc71;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --font-family-main: 'Poppins', Arial, sans-serif;
+            --font-family-mono: 'Roboto Mono', monospace;
+        }
+
+        html.light-theme {
+            /* Paleta de Cores (Tema Claro) */
+            --bg-color: #f4f7fc;
+            --bg-secondary-color: #ffffff;
+            --bg-tertiary-color: #eef2f9;
+            --border-color: #d1d9e6;
+            --text-primary-color: #1c2a41;
+            --text-secondary-color: #5b6a82;
+            --text-muted-color: #8899a6;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /*
+        ==========================================================================
+         2. RESETS E ESTILOS BASE
+        ==========================================================================
+        */
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /*
+        ==========================================================================
+         3. ESTRUTURA DO HEADER
+        ==========================================================================
+        */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 5%;
+            background: rgba(var(--bg-secondary-color-rgb, 17, 24, 36), 0.7); /* Efeito de vidro */
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        
+        .logo-area .title {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-switcher {
+            background: var(--bg-tertiary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+        }
+        .theme-switcher i {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--text-secondary-color);
+        }
+        .theme-switcher .icon-dark { display: none; }
+        html.light-theme .theme-switcher .icon-light { display: none; }
+        html.light-theme .theme-switcher .icon-dark { display: block; }
+
+        /* Estilização do Botão CTA (Call to Action) com gradiente */
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-blue-hover));
+            color: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.3s;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /*
+        ==========================================================================
+         4. ESTRUTURA DAS SEÇÕES E ANIMAÇÕES
+        ==========================================================================
+        */
+
+        main { 
+            /* O padding-top foi removido daqui e colocado na primeira seção (hero) */
+        }
+        
+        .section {
+            padding: 6rem 0;
+            text-align: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .section:last-child { border-bottom: none; }
+        
+        /* Efeito de gradiente nos títulos das seções */
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary-blue-hover), var(--text-primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary-color);
+            max-width: 700px;
+            margin: 0 auto 4rem auto;
+            line-height: 1.6;
+        }
+
+        /* Animação de aparição suave ao rolar a página */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /*
+        ==========================================================================
+         5. NOVA SEÇÃO "HERO" (PRIMEIRA DOBRA)
+        ==========================================================================
+        */
+
+        #hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Ocupa a altura inteira da tela */
+            padding-top: 100px; /* Espaço para o header fixo */
+            text-align: center;
+            color: white;
+            position: relative;
+            background: linear-gradient(-45deg, #0b0f16, #111824, #1c2a41, #0b0f16);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-secondary-color);
+        }
+        .hero-content .cta-button {
+            font-size: 1.2rem;
+            padding: 1rem 2.5rem;
+        }
+
+
+        /*
+        ==========================================================================
+         6. MÓDULO: GUIA DE INSTALAÇÃO INTERATIVO
+        ==========================================================================
+        */
+
+        .installation-guide {
+            /* Efeito de vidro fosco (Glassmorphism) */
+            background: rgba(var(--bg-secondary-color-rgb, 17, 24, 36), 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px var(--shadow-color);
+            text-align: left;
+        }
+
+        .browser-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            flex-wrap: wrap; 
+        }
+
+        .browser-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--text-secondary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .browser-tab:hover {
+            color: var(--text-primary-color);
+        }
+        .browser-tab.active {
+            color: var(--primary-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+        .browser-tab i {
+            margin-right: 0.5rem;
+        }
+
+        .installation-content {
+            display: none;
+        }
+        .installation-content.active {
+            display: block;
+        }
+
+        .installation-step {
+            display: none;
+            grid-template-columns: 1fr 1.2fr;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        @media (max-width: 900px) {
+            .installation-step {
+                grid-template-columns: 1fr; 
+            }
+        }
+
+        .installation-step.active {
+            display: grid;
+            animation: fadeInStep 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-text h3 {
+            font-size: 1.8rem;
+            color: var(--primary-blue);
+            margin: 0 0 1rem 0;
+        }
+        .step-text p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-secondary-color);
+        }
+
+        .step-illustration {
+            background-color: var(--bg-tertiary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            overflow: hidden;
+        }
+        .step-illustration svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .installation-nav {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-button {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-tertiary-color);
+            color: var(--text-primary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .nav-button:hover {
+            background: var(--border-color);
+        }
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-progress {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border-color);
+            transition: background-color 0.3s;
+        }
+        .progress-dot.active {
+            background: var(--primary-blue);
+        }
+
+        /*
+        ==========================================================================
+         7. MÓDULO: LINHA DO TEMPO
+        ==========================================================================
+        */
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--border-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-container.left { left: 0; }
+        .timeline-container.right { left: 50%; }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: var(--bg-color);
+            border: 4px solid var(--primary-blue);
+            top: 20px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-container.right::after { left: -10px; }
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: var(--bg-secondary-color);
+            position: relative;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .timeline-content:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(var(--primary-blue-rgb, 52, 152, 219), 0.3);
+        }
+        .timeline-content h3 {
+            margin-top: 0;
+            color: var(--primary-blue);
+        }
+        
+        /*
+        ==========================================================================
+         8. MÓDULO: GLOSSÁRIO
+        ==========================================================================
+        */
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .glossary-item {
+            background: var(--bg-secondary-color);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.3s;
+            text-align: left;
+        }
+        .glossary-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 15px rgba(var(--primary-blue-rgb, 52, 152, 219), 0.4);
+        }
+        
+        /* Modal do Glossário */
+        .modal {
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: var(--bg-secondary-color);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .close-button {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted-color);
+        }
+        
+        /*
+        ==========================================================================
+         9. MÓDULO: TABELA DE PLANOS
+        ==========================================================================
+        */
+
+        .pricing-table {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 1000px;
+            margin: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .pricing-table {
+                grid-template-columns: 1fr; /* Coluna única em telas menores */
+            }
+        }
+
+        .pricing-column {
+            background: var(--bg-secondary-color);
+        }
+        .pricing-column:not(:last-child) { border-right: 1px solid var(--border-color); }
+        .pricing-header {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .pricing-feature {
+            padding: 1.2rem 1.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .pricing-feature:nth-child(odd) { background: var(--bg-tertiary-color); }
+        .pricing-feature .fa-check { color: var(--success-color); }
+        .pricing-feature .fa-times { color: var(--danger-color); }
+
+        /*
+        ==========================================================================
+         10. FOOTER E BOTÃO "VOLTAR AO TOPO"
+        ==========================================================================
+        */
+
+        #toTopBtn {
+            position: fixed; bottom: 20px; right: 20px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-blue-hover)); 
+            color: white; border: none;
+            border-radius: 50%; width: 50px; height: 50px;
+            font-size: 1.5rem; cursor: pointer; opacity: 0;
+            visibility: hidden; z-index: 999;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+        }
+        #toTopBtn.show { opacity: 1; visibility: visible; }
+        #toTopBtn:hover { transform: scale(1.1); }
+        
+        footer {
+            text-align: center; padding: 3rem 0;
+            background: var(--bg-tertiary-color);
+            border-top: 1px solid var(--border-color);
+        }
+        .social-icons { margin-bottom: 1.5rem; }
+        .social-icons a {
+            color: var(--text-secondary-color); font-size: 1.5rem;
+            margin: 0 1rem; transition: color 0.3s;
+        }
+        .social-icons a:hover { color: var(--primary-blue); }
+        footer .links a {
+            color: var(--text-secondary-color); text-decoration: none;
+            margin: 0 15px; transition: color 0.3s;
+        }
+        footer .links a:hover { color: var(--primary-blue); }
+        footer .final-note {
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: var(--text-muted-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="title">simplify.x</div>
+        </div>
+        <div class="header-actions">
+            <div class="theme-switcher" id="theme-switcher" title="Alternar Tema">
+                <i class="fas fa-sun icon-light"></i>
+                <i class="fas fa-moon icon-dark"></i>
+            </div>
+            <a href="#download" class="cta-button">Instalar Extensão</a>
+        </div>
+    </header>
+
+    <main>
+
+        <section id="hero">
+            <div class="container hero-content fade-in">
+                <h1>A Sua Primeira Linha de Defesa Digital</h1>
+                <p>Navegue com confiança. O simplify.x educa, protege e capacita você contra golpes online através de uma extensão de navegador simples e poderosa.</p>
+                <a href="#download" class="cta-button">Instalação Rápida e Guiada</a>
+            </div>
+        </section>
+
+        <section id="download" class="container section">
+            <h2 class="section-title fade-in">Instalação Rápida e Guiada</h2>
+            <p class="section-subtitle fade-in">Siga o nosso guia passo a passo para adicionar a proteção do simplify.x ao seu navegador em menos de 2 minutos. Selecione o seu navegador abaixo para começar.</p>
+            
+            <div class="installation-guide fade-in">
+                <div class="browser-tabs">
+                    <button class="browser-tab active" data-browser="chrome"><i class="fab fa-chrome"></i> Google Chrome</button>
+                    <button class="browser-tab" data-browser="edge"><i class="fab fa-edge"></i> Microsoft Edge</button>
+                    <button class="browser-tab" data-browser="firefox"><i class="fab fa-firefox-browser"></i> Firefox</button>
+                </div>
+
+                <div id="guide-chrome" class="installation-content active">
+                    <div class="installation-step active" data-step="1">
+                        <div class="step-text">
+                            <h3>Passo 1: Descarregar o Ficheiro</h3>
+                            <p>Clique no botão de download para baixar o ficheiro <code>simplify.x-extension.zip</code>. Guarde-o num local de fácil acesso.</p>
+                        </div>
+                        <div class="step-illustration">
+                            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><style>.svg-bg{fill:var(--bg-secondary-color)}.svg-stroke{stroke:var(--border-color);stroke-width:2}.svg-fill-accent{fill:var(--primary-blue)}.svg-text{font-family:var(--font-family-main);fill:var(--text-primary-color);font-size:14px}@keyframes arrow-down{0%{transform:translateY(-5px)}50%{transform:translateY(5px)}100%{transform:translateY(-5px)}}</style><rect x="50" y="50" width="300" height="200" rx="10" class="svg-bg svg-stroke"/><path d="M175 110 l25 25 l25 -25" stroke-width="6" stroke="var(--primary-blue)" fill="none" stroke-linecap="round" style="animation:arrow-down 1.5s infinite ease-in-out"/><text x="130" y="90" class="svg-text" font-weight="bold">Download do Ficheiro</text><rect x="120" y="180" width="160" height="15" rx="7.5" fill="var(--bg-tertiary-color)"/><rect x="120" y="180" width="120" height="15" rx="7.5" class="svg-fill-accent"/><text x="145" y="215" class="svg-text" font-family:var(--font-family-mono)>simplify.x.zip</text></svg>
+                        </div>
+                    </div>
+                    <div class="installation-step" data-step="2">
+                        <div class="step-text">
+                            <h3>Passo 2: Extrair a Pasta</h3>
+                            <p>Localize o ficheiro <code>.zip</code> que descarregou. Clique com o botão direito sobre ele e selecione "Extrair tudo...". Isto irá criar uma nova pasta com os ficheiros da extensão.</p>
+                        </div>
+                        <div class="step-illustration">
+                            <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><style>.zip-icon{fill:var(--warning-color)}.folder-icon{fill:var(--primary-blue)}.line-anim{stroke:var(--text-secondary-color);stroke-dasharray:5 5;animation:line-move 1s linear infinite}@keyframes line-move{to{stroke-dashoffset:-10}}</style><g><path class="zip-icon" d="M80 90 v120h80v-120h-80zm10 10v100h60v-100h-60z"/><rect x="108" y="105" width="4" height="90" fill="white"/></g><path class="line-anim" d="M180 150 L 240 150"/><g><path class="folder-icon" d="M260 120 v90 h100 v-70 h-40 l-10-20z"/></g></svg>
+                        </div>
+                    </div>
+                    <div class="installation-step" data-step="3">
+                         <div class="step-text">
+                            <h3>Passo 3: Abrir as Extensões</h3>
+                            <p>No Chrome, clique no ícone de três pontos no canto superior direito. Vá para <code>Extensões</code> e depois clique em <code>Gerir extensões</code>.</p>
+                        </div>
+                        <div class="step-illustration">
+                            <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"><defs><filter id="shadow"><feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="var(--shadow-color)"/></filter></defs><rect x="10" y="10" width="480" height="50" fill="var(--bg-tertiary-color)" stroke="var(--border-color)"/><circle cx="455" cy="35" r="2" fill="var(--text-primary-color)"/><circle cx="455" cy="40" r="2" fill="var(--text-primary-color)"/><circle cx="455" cy="30" r="2" fill="var(--text-primary-color)"/><rect x="250" y="60" width="220" height="200" rx="8" fill="var(--bg-secondary-color)" style="filter:url(#shadow)"/><line x1="260" y1="140" x2="460" y2="140" stroke="var(--border-color)"/><rect x="260" y="155" width="200" height="30" fill="var(--primary-blue-hover)" rx="4"/><text x="270" y="175" fill="white" font-size="14px" font-weight="bold">Extensões</text></svg>
+                        </div>
+                    </div>
+                    <div class="installation-step" data-step="4">
+                        <div class="step-text">
+                            <h3>Passo 4: Ativar o Modo de Programador</h3>
+                            <p>Na página de extensões, procure por um interruptor chamado <code>Modo de programador</code> no canto superior direito e ative-o.</p>
+                        </div>
+                        <div class="step-illustration">
+                             <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="480" height="380" rx="8" fill="var(--bg-secondary-color)" stroke="var(--border-color)"/><text x="30" y="40" font-size="18px" font-weight="bold" fill="var(--text-primary-color)">Extensões</text><text x="260" y="40" font-size="14px" fill="var(--text-secondary-color)">Modo de programador</text><rect x="400" y="28" width="50" height="24" rx="12" fill="var(--primary-blue)"/><circle cx="438" cy="40" r="10" fill="white"/></svg>
+                        </div>
+                    </div>
+                    <div class="installation-step" data-step="5">
+                        <div class="step-text">
+                            <h3>Passo 5: Carregar a Extensão</h3>
+                            <p>Com o modo de programador ativo, clique em <code>Carregar expandida</code> e selecione a <strong>pasta</strong> que extraiu no Passo 2.</p>
+                        </div>
+                         <div class="step-illustration">
+                             <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="10" width="480" height="380" rx="8" fill="var(--bg-secondary-color)" stroke="var(--border-color)"/><text x="30" y="40" font-size="18px" font-weight="bold" fill="var(--text-primary-color)">Extensões</text><rect x="30" y="70" width="200" height="40" rx="8" fill="var(--primary-blue)"/><text x="50" y="95" fill="white" font-weight="bold">Carregar expandida</text><rect x="250" y="70" width="120" height="40" rx="8" fill="var(--bg-tertiary-color)" stroke="var(--border-color)"/><text x="270" y="95" fill="var(--text-secondary-color)">Atualizar</text></svg>
+                        </div>
+                    </div>
+                    <div class="installation-step" data-step="6">
+                        <div class="step-text">
+                            <h3>Passo 6: Pronto!</h3>
+                            <p>A extensão simplify.x aparecerá na sua lista. Recomendamos fixá-la na barra de ferramentas. Está protegido!</p>
+                        </div>
+                         <div class="step-illustration">
+                            <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg"><style>.check{stroke:var(--success-color);stroke-width:15;stroke-linecap:round;stroke-dasharray:100;animation:check-anim 1s ease-out forwards}@keyframes check-anim{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}</style><rect x="10" y="10" width="480" height="50" fill="var(--bg-tertiary-color)" stroke="var(--border-color)"/><rect x="440" y="25" width="30" height="20" rx="5" fill="var(--primary-blue)" stroke="var(--border-color)"/><text x="448" y="40" fill="white" font-size="12px" font-weight="bold">S</text><path class="check" d="M180 220 l40 40 l80-80" fill="none"/><text x="140" y="340" fill="var(--text-primary-color)" font-size="20px">Instalado com Sucesso!</text></svg>
+                        </div>
+                    </div>
+                    <div class="installation-nav">
+                        <button class="nav-button prev-button" disabled>Anterior</button>
+                        <div class="step-progress"></div>
+                        <button class="nav-button next-button">Próximo</button>
+                    </div>
+                </div>
+
+                <div id="guide-edge" class="installation-content">
+                    <p style="padding: 1rem; text-align: center; font-size: 1.1rem;">O processo para o Edge é quase idêntico ao do Chrome. Vá para <code>...</code> > <code>Extensões</code> > <code>Gerir extensões</code>, ative o "Modo de programador" e clique em "Carregar expandida".</p>
+                </div>
+
+                <div id="guide-firefox" class="installation-content">
+                    <p style="padding: 1rem; text-align: center; font-size: 1.1rem;">No Firefox, navegue para <code>about:debugging</code>. Clique em "Este Firefox" no menu lateral, depois em "Carregar Extra Temporário..." e selecione o ficheiro <code>manifest.json</code> de dentro da pasta que extraiu.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title fade-in">Marcos Históricos dos Golpes Digitais</h2>
+                <p class="section-subtitle fade-in">Uma viagem pela história para entender como as ameaças online evoluíram.</p>
+                <div class="timeline">
+                    <div class="timeline-container left fade-in">
+                        <div class="timeline-content">
+                            <h3>1988: Morris Worm</h3>
+                            <p>Um dos primeiros worms a espalhar-se pela Internet, destacando pela primeira vez a vulnerabilidade das redes conectadas.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-container right fade-in">
+                        <div class="timeline-content">
+                            <h3>2000: ILOVEYOU</h3>
+                            <p>Um worm que se espalhou por e-mail, causando milhares de milhões em danos e provando o poder da engenharia social.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-container left fade-in">
+                        <div class="timeline-content">
+                            <h3>Anos 2010: Ascensão do Phishing</h3>
+                            <p>A popularização de bancos online e redes sociais levou a uma explosão de sites falsos para roubar palavras-passe.</p>
+                        </div>
+                    </div>
+                     <div class="timeline-container right fade-in">
+                        <div class="timeline-content">
+                            <h3>2017: WannaCry Ransomware</h3>
+                            <p>Um ataque global que encriptou ficheiros de hospitais e empresas, exigindo resgate e paralisando serviços essenciais.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section" id="pricing">
+            <div class="container">
+                <h2 class="section-title fade-in">Planos para Todas as Necessidades</h2>
+                <p class="section-subtitle fade-in">Comece com a nossa proteção essencial gratuita ou turbine a sua segurança com recursos avançados no nosso plano Pro.</p>
+                <div class="pricing-table fade-in">
+                    <div class="pricing-column">
+                        <div class="pricing-header">Recursos</div>
+                        <div class="pricing-feature"><span>Verificação de Links</span></div>
+                        <div class="pricing-feature"><span>Bloqueio de Phishing</span></div>
+                        <div class="pricing-feature"><span>Alerta de Malware</span></div>
+                        <div class="pricing-feature"><span>Análise Preditiva</span></div>
+                        <div class="pricing-feature"><span>Verificação de Downloads</span></div>
+                        <div class="pricing-feature"><span>Suporte Prioritário</span></div>
+                    </div>
+                    <div class="pricing-column">
+                        <div class="pricing-header">Gratuito</div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Essencial</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Padrão</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Padrão</span></div>
+                        <div class="pricing-feature"><i class="fas fa-times"></i></div>
+                        <div class="pricing-feature"><i class="fas fa-times"></i></div>
+                        <div class="pricing-feature"><i class="fas fa-times"></i></div>
+                    </div>
+                    <div class="pricing-column">
+                        <div class="pricing-header">Pro (Em Breve)</div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Avançada</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Agressivo</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Tempo Real</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Baseada em IA</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> Automática</span></div>
+                        <div class="pricing-feature"><i class="fas fa-check"></i><span> 24/7</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title fade-in">Glossário de Cibersegurança</h2>
+                <p class="section-subtitle fade-in">O conhecimento é a sua melhor defesa. Clique num termo para aprender o que significa.</p>
+                <div class="glossary-grid fade-in" id="glossary-grid">
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="social-icons">
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+            <div class="links">
+                <a href="#">Contacto</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos de Uso</a>
+            </div>
+            <p class="final-note">
+                © 2025 simplify.x — Dúvidas? Não complique, simplifique.
+            </p>
+        </div>
+    </footer>
+    
+    <button id="toTopBtn" aria-label="Voltar ao topo"><i class="fas fa-arrow-up"></i></button>
+
+    <div class="modal" id="glossary-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-term"></h3>
+                <span class="close-button" id="modal-close-button">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-definition"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const glossaryData = {
+            'Adware': 'Software que exibe anúncios indesejados no seu computador ou navegador.', 'Antivírus': 'Software projetado para detetar, prevenir e remover vírus de computador e outro software malicioso.', 'Ataque de Força Bruta': 'Uma tentativa de adivinhar uma palavra-passe tentando todas as combinações possíveis.', 'Ataque de Dia Zero (Zero-Day)': 'Um ataque que explora uma vulnerabilidade de software desconhecida.', 'Ataque Man-in-the-Middle (MitM)': 'Um ataque onde o invasor interceta a comunicação entre duas partes.', 'Autenticação de Dois Fatores (2FA)': 'Um método de segurança que exige duas formas de identificação para dar acesso a uma conta.', 'Backdoor': 'Um método secreto de contornar a autenticação normal para obter acesso a um sistema.', 'Backup': 'Uma cópia de segurança de dados que pode ser usada para restaurar o original em caso de perda.', 'Biometria': 'Métodos de autenticação baseados em características biológicas, como impressão digital.', 'Blacklist': 'Uma lista de entidades (como endereços IP ou URLs) que são bloqueadas.', 'Botnet': 'Uma rede de computadores infetados (bots) controlados remotamente por um invasor.', 'Certificado Digital': 'Um ficheiro eletrónico que prova a identidade de um site, usado para habilitar conexões seguras (HTTPS).', 'Cibersegurança': 'A prática de proteger sistemas, redes e programas de ataques digitais.', 'Cookie': 'Um pequeno ficheiro de dados que um site armazena no computador de um utilizador.', 'Criptografia': 'O processo de converter informações num código para impedir o acesso não autorizado.', 'Deepfake': 'Mídia sintética em que a imagem ou voz de uma pessoa é substituída pela de outra, usando IA.', 'Negação de Serviço (DoS)': 'Um ataque que tenta tornar um serviço online indisponível.', 'DNS (Domain Name System)': 'O sistema que traduz nomes de domínio em endereços IP.', 'Engenharia Social': 'A arte de manipular pessoas para que elas divulguem informações confidenciais.', 'Exploit': 'Um código que se aproveita de uma vulnerabilidade para causar um comportamento não intencional.', 'Firewall': 'Um sistema de segurança de rede que monitora e controla o tráfego.', 'Hacker': 'Um indivíduo que usa habilidades de programação para superar um problema.', 'HTTPS': 'A versão segura do HTTP, que criptografa a comunicação.', 'Keylogger': 'Software que grava as teclas digitadas num teclado.', 'Malware': 'Termo genérico para qualquer software projetado para causar danos a um computador.', 'Phishing': 'Uma tentativa fraudulenta de obter informações confidenciais disfarçando-se de uma entidade confiável.', 'Ransomware': 'Um tipo de malware que encripta os ficheiros da vítima e exige um resgate.', 'Rootkit': 'Um software malicioso que permite acesso não autorizado e controlo de um sistema.', 'Scam': 'Um esquema fraudulento ou enganoso.', 'Spam': 'Mensagens eletrónicas não solicitadas, especialmente publicidade.', 'Spear Phishing': 'Um ataque de phishing direcionado a um indivíduo ou organização específica.', 'Spyware': 'Malware que se instala secretamente para coletar informações sobre o utilizador.', 'Cavalo de Troia (Trojan)': 'Um tipo de malware que se disfarça de software legítimo.', 'Rede Privada Virtual (VPN)': 'Cria uma conexão segura e encriptada numa rede menos segura.', 'Vírus': 'Um código malicioso que se replica modificando outros programas.', 'Vulnerabilidade': 'Uma fraqueza num sistema que pode ser explorada por um invasor.', 'Worm': 'Um malware que se replica para se espalhar para outros computadores.'
+        };
+
+        const fadeInElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        fadeInElements.forEach(el => observer.observe(el));
+        
+        function setRgbColors() {
+            const style = getComputedStyle(document.documentElement);
+            const hexToRgb = hex => {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+            };
+            let secondaryRgb = hexToRgb(style.getPropertyValue('--bg-secondary-color').trim());
+            let blueRgb = hexToRgb(style.getPropertyValue('--primary-blue').trim());
+            if(secondaryRgb) document.documentElement.style.setProperty('--bg-secondary-color-rgb', secondaryRgb);
+            if(blueRgb) document.documentElement.style.setProperty('--primary-blue-rgb', blueRgb);
+        }
+        setRgbColors(); 
+
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const htmlEl = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') {
+            htmlEl.classList.replace('dark-theme', 'light-theme');
+        }
+        themeSwitcher.addEventListener('click', () => {
+            htmlEl.classList.toggle('light-theme');
+            htmlEl.classList.toggle('dark-theme');
+            localStorage.setItem('theme', htmlEl.classList.contains('light-theme') ? 'light' : 'dark');
+            setRgbColors();
+        });
+
+        const tabs = document.querySelectorAll('.browser-tab');
+        const contents = document.querySelectorAll('.installation-content');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`guide-${tab.dataset.browser}`).classList.add('active');
+            });
+        });
+
+        const guideChrome = document.getElementById('guide-chrome');
+        if (guideChrome) {
+            const steps = guideChrome.querySelectorAll('.installation-step');
+            const nextBtn = guideChrome.querySelector('.next-button');
+            const prevBtn = guideChrome.querySelector('.prev-button');
+            const progressContainer = guideChrome.querySelector('.step-progress');
+            let currentStep = 1;
+            for(let i=0; i < steps.length; i++) {
+                progressContainer.appendChild(document.createElement('div')).classList.add('progress-dot');
+            }
+            const progressDots = progressContainer.querySelectorAll('.progress-dot');
+
+            const updateGuide = () => {
+                steps.forEach(step => step.classList.remove('active'));
+                steps[currentStep - 1].classList.add('active');
+                prevBtn.disabled = currentStep === 1;
+                nextBtn.disabled = currentStep === steps.length;
+                progressDots.forEach((dot, index) => dot.classList.toggle('active', index < currentStep));
+            };
+            nextBtn.addEventListener('click', () => { if (currentStep < steps.length) { currentStep++; updateGuide(); } });
+            prevBtn.addEventListener('click', () => { if (currentStep > 1) { currentStep--; updateGuide(); } });
+            updateGuide();
+        }
+
+        const glossaryGrid = document.getElementById('glossary-grid');
+        const modal = document.getElementById('glossary-modal');
+        const modalTerm = document.getElementById('modal-term');
+        const modalDefinition = document.getElementById('modal-definition');
+        const closeModalButton = document.getElementById('modal-close-button');
+        Object.keys(glossaryData).sort().forEach(term => {
+            const item = document.createElement('div');
+            item.className = 'glossary-item';
+            item.textContent = term;
+            item.addEventListener('click', () => {
+                modalTerm.textContent = term;
+                modalDefinition.textContent = glossaryData[term];
+                modal.classList.add('show');
+            });
+            glossaryGrid.appendChild(item);
+        });
+        closeModalButton.addEventListener('click', () => modal.classList.remove('show'));
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('show'); });
+
+        const toTopBtn = document.getElementById('toTopBtn');
+        window.addEventListener('scroll', () => toTopBtn.classList.toggle('show', window.pageYOffset > 300));
+        toTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    });
+    </script>
+</body>
+</html>

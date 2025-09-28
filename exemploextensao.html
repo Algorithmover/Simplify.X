@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simplify.x</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #0b0f16;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 25% 25%, #1a2333 2px, transparent 0),
+        radial-gradient(circle at 75% 75%, #1a2333 2px, transparent 0);
+      background-size: 50px 50px;
+      animation: moveBackground 30s linear infinite;
+    }
+
+    @keyframes moveBackground {
+      0% { background-position: 0 0, 0 0; }
+      50% { background-position: 25px 25px, -25px -25px; }
+      100% { background-position: 0 0, 0 0; }
+    }
+
+    header { display: flex; align-items: center; justify-content: center; padding: 2rem 4rem; }
+    .title { font-size: 2.5rem; font-weight: bold; }
+    .subtitle { margin-top: 0.5rem; font-size: 1rem; color: #ccc; text-align: center; }
+
+    main { flex: 1; padding: 2rem 4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+    .intro { display: flex; justify-content: center; align-items: center; gap: 3rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+    .text-left { max-width: 500px; text-align: center; }
+    .text-left h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .text-left p { font-size: 1.2rem; color: #ccc; line-height: 1.5; }
+    .text-left p span { color: #00c853; font-weight: bold; }
+
+    .install-btn {
+      background: #00c853; color: white; font-weight: bold; font-size: 1.5rem;
+      padding: 1.5rem 3rem; border-radius: 30px; border: none; cursor: pointer;
+      transition: 0.3s; margin-top: 1.5rem;
+    }
+    .install-btn:hover { background: #009624; box-shadow: 0 0 20px #00c853; transform: scale(1.05); }
+
+    .box-right {
+      background: #111824cc; border: 1px solid #1f2a3a; padding: 2.5rem;
+      border-radius: 10px; min-width: 360px; display: flex; flex-direction: column; align-items: center;
+      position: relative;
+    }
+
+    .steps {
+      background: #0c121d; border-radius: 6px; height: 180px; width: 100%;
+      overflow: hidden; margin-bottom: 1rem; padding: 0 1rem; position: relative;
+    }
+
+    .steps p {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      margin: 0; font-size: 1rem; color: #ddd; line-height: 1.4;
+      text-align: center; word-break: break-word; width: 100%;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .steps p.active { opacity: 1; }
+
+    .steps small { color: #888; position: absolute; bottom: 8px; right: 10px; font-size: 0.9rem; }
+
+    .arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: #0b254a; color: white; border: none; border-radius: 50%;
+      width: 40px; height: 40px; cursor: pointer; font-size: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: 0.3s;
+    }
+    .arrow:hover { background: #123a75; box-shadow: 0 0 10px #00c853; }
+    .arrow-left { left: -20px; }
+    .arrow-right { right: -20px; }
+
+    .diferenciais, .golpes { margin-top: 4rem; text-align: center; }
+    .diferenciais h2, .golpes h2 { font-size: 2rem; margin-bottom: 2rem; }
+
+    .cards, .golpes-cards { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+
+    .card, .golpe-card {
+      background: #111824cc; border: 1px solid #1f2a3a; border-radius: 12px; padding: 2rem;
+      width: 300px; text-align: center; transition: 0.3s;
+    }
+    .card:hover, .golpe-card:hover { transform: scale(1.05); border-color: #0b254a; box-shadow: 0 0 15px #00c853; }
+
+    .card img, .golpe-card img { width: 60px; height: 60px; margin-bottom: 1rem; }
+    .card h3, .golpe-card h3 { margin-bottom: 0.5rem; font-size: 1.3rem; }
+    .card p, .golpe-card p { color: #ccc; font-size: 1rem; line-height: 1.4; }
+
+    footer { text-align: center; padding: 1rem; background: #0b0f16; border-top: 1px solid #1f2a3a; font-size: 0.9rem; color: #aaa; margin-top: 3rem; }
+
+    @media (max-width: 900px) { 
+      .intro { flex-direction: column; } 
+      .text-left, .box-right { max-width: 100%; width: 100%; text-align: center; } 
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="title">Simplify.x</div>
+      <div class="subtitle">site e extensão verificadora de sites</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="text-left">
+        <h1>Verifique sites com facilidade</h1>
+        <p>
+          Simplify.x ajuda você a confirmar a <span>segurança</span> de qualquer página da web.  
+          Com nossa extensão, você terá um <span>alerta rápido</span> se o site parecer suspeito ou inseguro.  
+          Navegue com mais <span>confiança</span> e evite golpes digitais.
+        </p>
+        <button class="install-btn">Adicionar Extensão</button>
+      </div>
+
+      <div class="box-right">
+        <h2>Como instalar a extensão</h2>
+        <div class="steps" id="step-box">
+          <p class="active" id="step-text"></p>
+          <small id="step-count"></small>
+        </div>
+        <button class="arrow arrow-left" onclick="prevStep()">&#8592;</button>
+        <button class="arrow arrow-right" onclick="nextStep()">&#8594;</button>
+      </div>
+    </section>
+
+    <section class="diferenciais">
+      <h2>Por que escolher a Simplify.x?</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/laptop.png" alt="Leve e acessível">
+          <h3>Leve e acessível</h3>
+          <p>Funciona até em PCs fracos. Não trava seu computador.</p>
+        </div>
+        <div class="card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/rocket.png" alt="Prático e rápido">
+          <h3>Prático e rápido</h3>
+          <p>Instalação simples. Começa a analisar sites imediatamente.</p>
+        </div>
+        <div class="card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/lock--v1.png" alt="Proteção essencial">
+          <h3>Proteção essencial</h3>
+          <p>Camada extra de segurança com alertas automáticos em sites duvidosos.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="golpes">
+      <h2>Fique atento! Alguns golpes comuns na internet</h2>
+      <div class="golpes-cards">
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/phishing.png" alt="Phishing">
+          <h3>Phishing</h3>
+          <p>Emails ou sites falsos que tentam roubar suas senhas e dados pessoais.</p>
+        </div>
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/bug.png" alt="Malware">
+          <h3>Malware</h3>
+          <p>Programas maliciosos que infectam seu computador e roubam informações.</p>
+        </div>
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/news.png" alt="Fake News">
+          <h3>Fake News</h3>
+          <p>Informações falsas que podem enganar você e induzir a cliques perigosos.</p>
+        </div>
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/ransomware.png" alt="Ransomware">
+          <h3>Ransomware</h3>
+          <p>Software que bloqueia seu computador e exige pagamento para liberar arquivos.</p>
+        </div>
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/bank-cards.png" alt="Golpes financeiros">
+          <h3>Golpes financeiros</h3>
+          <p>Sites ou mensagens que tentam roubar dados bancários ou cartões de crédito.</p>
+        </div>
+        <div class="golpe-card">
+          <img src="https://img.icons8.com/ios-filled/100/00c853/facebook-like.png" alt="Golpes em redes sociais">
+          <h3>Golpes em redes sociais</h3>
+          <p>Perfis falsos ou links maliciosos que enganam usuários em plataformas sociais.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Simplify.x — dúvidas? Não complique, simplifique
+  </footer>
+
+  <script>
+    const steps = [
+      '1 – Clique em “Adicionar Extensão”: No topo desta página, há um botão verde escrito “Adicionar Extensão”. Clique nele para iniciar o processo de instalação.',
+      '2 – Confirme a instalação: O navegador abrirá uma pequena janela de confirmação. Clique em “Adicionar” (ou “Install”) e aguarde alguns segundos.',
+      '3 – Encontre a extensão instalada: Vá até o canto superior direito do navegador. Clique no ícone de peça de quebra-cabeça 🧩 e procure pelo Simplify.x na lista.',
+      '4 – Fixe a extensão na barra: Clique no ícone de alfinete 📌 ao lado do nome Simplify.x para tê-la sempre visível.',
+      '5 – Comece a navegar com segurança: Agora está pronto! O Simplify.x fará automaticamente a análise de sites.'
+    ];
+
+    let index = 0;
+    const stepText = document.getElementById("step-text");
+    const stepCount = document.getElementById("step-count");
+
+    function renderStep() {
+      stepText.innerText = steps[index];
+      stepCount.innerText = `Passo ${index + 1} de ${steps.length}`;
+    }
+
+    function nextStep() {
+      index = (index + 1) % steps.length;
+      renderStep();
+    }
+
+    function prevStep() {
+      index = (index - 1 + steps.length) % steps.length;
+      renderStep();
+    }
+
+    renderStep();
+  </script>
+</body>
+</html>

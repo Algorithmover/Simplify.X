@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "simplify.x Security (Professional)",
+  "version": "4.0",
+  "description": "Análise avançada...",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "notifications"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["warning.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
